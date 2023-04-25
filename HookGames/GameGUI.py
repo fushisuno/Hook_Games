@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter.messagebox as messagebox
 from GameStore import GameStore
 from Games import *
+import re
 
 class GameStoreGUI:
     def __init__(self, store: GameStore):
@@ -85,25 +86,59 @@ class GameStoreGUI:
         price_entry.grid(row=2, column=1, padx=5, pady=5)
 
         def confirm():
-            game_name = game_name_entry.get()
-            category = category_combobox.get()
-            price = float(price_entry.get())
-            if (game_name == None or len(game_name)<5) or (category == None or len(category) < 3) or (price < 0):
-                add_game_window.destroy()
-                messagebox.showerror("Error", "Valor Inválido")
-            else:
-                if category == "Ação":
-                    self.store.add_game(ActionGame(game_name, price))
-                elif category == "Terror":
-                    self.store.add_game(HorrorGame(game_name, price))
-                elif category == "RPG":
-                    self.store.add_game(RPGGame(game_name, price))
-                elif category == "Esporte":
-                    self.store.add_game(SportsGame(game_name, price)) 
+            try:
 
-                self.store = GameStore()
-                self.store.get_games()
+                gate = ["Ação", "Terror", "RPG", "Esporte"]
+                game_name = game_name_entry.get().strip()
+                game_name = re.sub(r"\s+", " ", game_name)
+                category = category_combobox.get()
+                price = price_entry.get()
+
+                if str.isnumeric(price) == True:
+                    price = float(price)
+                else:
+                    raise Exception("Preço Inválido, digite um número")
+
+                if str.isnumeric(game_name) == True:
+                    raise Exception("Nome inválido, não digite números")
+                
+                if game_name.strip() == "" or len(game_name.strip()) < 5:
+                    raise Exception("Nome inválido, digite algum valor")
+                else:
+                    for game in self.store.games:
+                        tes = str(game.title).upper()
+                        tes = re.sub(r"\s+", " ", tes)
+                        uso = game_name.upper()
+                        if tes == uso:
+                            raise Exception("Inválido, jogo já está na lista")
+
+                
+                if category not in gate:
+                    raise Exception("Categoria inválida")
+                
+                if (game_name == None or len(game_name)<5) or (category == None or len(category) < 3) or (price < 0):
+                    raise Exception("Valor Inválido")
+                else:
+                    if category == "Ação":
+                        self.store.add_game(ActionGame(game_name, price))
+                    elif category == "Terror":
+                        self.store.add_game(HorrorGame(game_name, price))
+                    elif category == "RPG":
+                        self.store.add_game(RPGGame(game_name, price))
+                    elif category == "Esporte":
+                        self.store.add_game(SportsGame(game_name, price))
+                    else:
+                        return Exception 
+
+                    self.store = GameStore()
+                    self.store.get_games()
+                    add_game_window.destroy()
+            except Exception as e:
                 add_game_window.destroy()
+                if e:
+                    messagebox.showerror("Error", e)
+                else:
+                    messagebox.showerror("Error", "Valor Inválido")
 
         confirm_button = Button(add_game_window, text="Confirmar", command=confirm)
         confirm_button.grid(row=3, column=1, padx=5, pady=5)
