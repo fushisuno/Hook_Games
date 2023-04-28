@@ -1,4 +1,3 @@
-# Hook_Games
 # Lojinha em Python
 
 Está é uma loja simples feita em Python como projeto de aprendizado
@@ -32,7 +31,7 @@ Contribuições são sempre bem-vindas! Se você tiver alguma sugestão ou encon
 
 ## 
 
-![Logo IFPR](https://seeklogo.com/images/I/instituto-federal-do-parana-logo-BF04AAA077-seeklogo.com.png)
+#      ㅤ ㅤ ㅤ ㅤ ㅤ ㅤ ㅤㅤ![Logo IFPR](https://seeklogo.com/images/I/instituto-federal-do-parana-logo-BF04AAA077-seeklogo.com.png)
 
 **By Fushisuno**
 
